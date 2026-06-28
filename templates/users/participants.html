@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Участники · TeamFinder{% endblock %}
+{% block content %}
+<h1>Зарегистрированные пользователи</h1>
+<section class="grid">
+  {% for participant in participants %}
+    <article class="card user-card-large">
+      {% if participant.avatar %}<img src="{{ participant.avatar.url }}" alt="">{% endif %}
+      <h2><a href="{% url 'users:detail' participant.id %}">{{ participant.surname }} {{ participant.name }}</a></h2>
+      <p>{{ participant.about|default:'Пользователь пока не заполнил описание.'|truncatechars:120 }}</p>
+      <a class="button ghost" href="{% url 'users:detail' participant.id %}">Посмотреть контакты</a>
+    </article>
+  {% empty %}<p>Пользователей пока нет.</p>{% endfor %}
+</section>
+{% include 'includes/pagination.html' %}
+{% endblock %}

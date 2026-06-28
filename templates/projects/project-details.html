@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ project.name }} · TeamFinder{% endblock %}
+{% block content %}
+<article class="panel" data-project-id="{{ project.id }}">
+  <div class="row between">
+    <div>
+      <h1>{{ project.name }}</h1>
+      <p class="meta">Автор: <a href="{% url 'users:detail' project.owner.id %}">{{ project.owner.full_name }}</a> · {{ project.created_at|date:'d.m.Y H:i' }}</p>
+    </div>
+    <span class="status {{ project.status }}">{{ project.get_status_display }}</span>
+  </div>
+  <p>{{ project.description|linebreaksbr }}</p>
+  {% if project.github_url %}<p><a href="{{ project.github_url }}" target="_blank" rel="noreferrer">GitHub проекта</a></p>{% endif %}
+
+  <h2>Необходимые навыки</h2>
+  <div class="tags" id="project-skills">
+    {% for skill in project.skills.all %}
+      <span class="tag" data-skill-id="{{ skill.id }}">{{ skill.name }}{% if user == project.owner or user.is_staff %}<button class="remove-skill" data-url="{% url 'projects:remove_skill' project.id skill.id %}">×</button>{% endif %}</span>
+    {% empty %}<span class="muted">Навыки пока не указаны.</span>{% endfor %}
+  </div>
+  {% if user == project.owner or user.is_staff %}
+    <div class="skill-box">
+      <input id="skill-input" placeholder="Например: Django" autocomplete="off" data-suggest-url="{% url 'projects:skills_autocomplete' %}" data-add-url="{% url 'projects:add_skill' project.id %}">
+      <button id="skill-add-btn">Добавить навык</button>
+      <div id="skill-suggestions" class="suggestions"></div>
+    </div>
+  {% endif %}
+
+  <h2>Участники проекта</h2>
+  <div class="grid compact">
+    {% for participant in project.participants.all %}
+      <a class="user-card" href="{% url 'users:detail' participant.id %}">
+        {% if participant.avatar %}<img src="{{ participant.avatar.url }}" alt="">{% endif %}
+        <span>{{ participant.surname }} {{ participant.name }}</span>
+      </a>
+    {% empty %}<p>Пока участников нет.</p>{% endfor %}
+  </div>
+
+  <div class="actions">
+    {% if user.is_authenticated %}
+      {% if user == project.owner or user.is_staff %}
+        <a class="button" href="{% url 'projects:edit' project.id %}">Редактировать проект</a>
+        {% if project.status == 'open' %}<button class="button danger" id="complete-project" data-url="{% url 'projects:complete' project.id %}">Завершить проект</button>{% endif %}
+      {% else %}
+        <button class="button" id="participate-project" data-url="{% url 'projects:toggle_participate' project.id %}">Участвовать / отказаться</button>
+      {% endif %}
+    {% else %}
+      <a class="button" href="{% url 'users:login' %}">Войти, чтобы участвовать</a>
+    {% endif %}
+    <button class="button ghost" onclick="navigator.clipboard ? navigator.clipboard.writeText(location.href) : alert(location.href)">Поделиться ссылкой</button>
+  </div>
+</article>
+<script src="{% static 'js/skills.js' %}"></script>
+<script src="{% static 'js/project_actions.js' %}"></script>
+{% endblock %}

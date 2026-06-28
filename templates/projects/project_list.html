@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Проекты · TeamFinder{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Актуальные проекты</h1>
+  <p>Найдите команду или присоединитесь к pet-проекту.</p>
+</section>
+
+{% if all_skills %}
+<section class="filters">
+  <strong>Фильтр по необходимым навыкам:</strong>
+  <a class="tag {% if not active_skill %}active{% endif %}" href="{% url 'projects:list' %}">Все</a>
+  {% for skill in all_skills %}
+    <a class="tag {% if active_skill == skill.name %}active{% endif %}" href="?skill={{ skill.name|urlencode }}">{{ skill.name }}</a>
+  {% endfor %}
+</section>
+{% endif %}
+
+<section class="grid">
+  {% for project in projects %}
+    <article class="card">
+      <div class="author">
+        {% if project.owner.avatar %}<img src="{{ project.owner.avatar.url }}" alt="">{% endif %}
+        <a href="{% url 'users:detail' project.owner.id %}">{{ project.owner.surname }} {{ project.owner.name }}</a>
+      </div>
+      <h2><a href="{% url 'projects:detail' project.id %}">{{ project.name }}</a></h2>
+      <p>{{ project.description|truncatechars:180 }}</p>
+      <div class="meta">{{ project.created_at|date:'d.m.Y H:i' }} · {{ project.get_status_display }}</div>
+      <div class="tags">
+        {% for skill in project.skills.all %}<span class="tag">{{ skill.name }}</span>{% endfor %}
+      </div>
+    </article>
+  {% empty %}
+    <p>Проекты пока не добавлены.</p>
+  {% endfor %}
+</section>
+{% include 'includes/pagination.html' %}
+{% endblock %}

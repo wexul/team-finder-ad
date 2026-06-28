@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}{% if is_edit %}Редактирование{% else %}Создание{% endif %} проекта · TeamFinder{% endblock %}
+{% block content %}
+<section class="panel narrow">
+  <h1>{% if is_edit %}Редактировать проект{% else %}Создать проект{% endif %}</h1>
+  <form method="post">
+    {% include 'includes/form.html' %}
+    <button class="button" type="submit">{% if is_edit %}Сохранить изменения{% else %}Опубликовать{% endif %}</button>
+  </form>
+</section>
+{% endblock %}

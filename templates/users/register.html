@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Регистрация · TeamFinder{% endblock %}
+{% block content %}
+<section class="panel narrow">
+  <h1>Регистрация</h1>
+  <form method="post">
+    {% include 'includes/form.html' %}
+    <button class="button" type="submit">Создать аккаунт</button>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Редактирование профиля · TeamFinder{% endblock %}
+{% block content %}
+<section class="panel narrow">
+  <h1>Редактировать профиль</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% include 'includes/form.html' %}
+    <button class="button" type="submit">Сохранить</button>
+  </form>
+</section>
+{% endblock %}

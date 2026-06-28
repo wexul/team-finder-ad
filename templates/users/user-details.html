@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}{{ profile_user.full_name }} · TeamFinder{% endblock %}
+{% block content %}
+<section class="panel">
+  <div class="profile">
+    {% if profile_user.avatar %}<img src="{{ profile_user.avatar.url }}" alt="">{% endif %}
+    <div>
+      <h1>{{ profile_user.surname }} {{ profile_user.name }}</h1>
+      <p>{{ profile_user.about|default:'Описание профиля пока не заполнено.' }}</p>
+      <p>Email: <a href="mailto:{{ profile_user.email }}">{{ profile_user.email }}</a></p>
+      {% if profile_user.phone %}<p>Телефон: {{ profile_user.phone }}</p>{% endif %}
+      {% if profile_user.github_url %}<p>GitHub: <a href="{{ profile_user.github_url }}" target="_blank" rel="noreferrer">{{ profile_user.github_url }}</a></p>{% endif %}
+      {% if user == profile_user %}
+        <a class="button" href="{% url 'users:edit_profile' %}">Редактировать профиль</a>
+        <a class="button ghost" href="{% url 'users:change_password' %}">Сменить пароль</a>
+      {% endif %}
+      <button class="button ghost" onclick="navigator.clipboard ? navigator.clipboard.writeText(location.href) : alert(location.href)">Поделиться профилем</button>
+    </div>
+  </div>
+</section>
+
+<h2>Проекты пользователя</h2>
+<section class="grid">
+  {% for project in profile_user.owned_projects.all %}
+    <article class="card">
+      <h3><a href="{% url 'projects:detail' project.id %}">{{ project.name }}</a></h3>
+      <p>{{ project.description|truncatechars:140 }}</p>
+    </article>
+  {% empty %}<p>Пользователь ещё не создал проекты.</p>{% endfor %}
+</section>
+{% endblock %}
