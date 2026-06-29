@@ -9,14 +9,30 @@ class UserFlowTests(TestCase):
     def test_register_login_by_email(self):
         response = self.client.post(
             reverse("users:register"),
-            {"name": "Мария", "surname": "Иванова", "email": "maria@example.com", "password": "pass12345"},
+            {
+                "name": "Мария",
+                "surname": "Иванова",
+                "email": "maria@example.com",
+                "password": "pass12345",
+            },
         )
         self.assertRedirects(response, reverse("projects:list"))
         self.assertTrue(User.objects.filter(email="maria@example.com").exists())
 
     def test_phone_normalized_and_unique(self):
-        first = User.objects.create_user(email="first@example.com", password="pass", name="A", surname="B", phone="+79991234567")
-        second = User.objects.create_user(email="second@example.com", password="pass", name="C", surname="D")
+        first = User.objects.create_user(
+            email="first@example.com",
+            password="pass",
+            name="A",
+            surname="B",
+            phone="+79991234567",
+        )
+        second = User.objects.create_user(
+            email="second@example.com",
+            password="pass",
+            name="C",
+            surname="D",
+        )
         form = ProfileForm(
             data={
                 "name": second.name,
@@ -32,7 +48,12 @@ class UserFlowTests(TestCase):
         self.assertEqual(first.phone, "+79991234567")
 
     def test_github_url_must_be_github(self):
-        user = User.objects.create_user(email="user@example.com", password="pass", name="A", surname="B")
+        user = User.objects.create_user(
+            email="user@example.com",
+            password="pass",
+            name="A",
+            surname="B",
+        )
         form = ProfileForm(
             data={
                 "name": "A",

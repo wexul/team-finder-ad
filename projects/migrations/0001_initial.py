@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True, db_index=True)),
                 ('github_url', models.URLField(blank=True)),
-                ('status', models.CharField(choices=[('open', 'Open'), ('closed', 'Closed')], db_index=True, default='open', max_length=6)),
+                ('status', models.CharField(choices=[('open', 'Открыт'), ('closed', 'Закрыт')], db_index=True, default='open', max_length=6)),
             ],
             options={
                 'verbose_name': 'Проект',

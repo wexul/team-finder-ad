@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
             options={
                 'verbose_name': 'Пользователь',
                 'verbose_name_plural': 'Пользователи',
-                'ordering': ['-id'],
+                'ordering': ['-date_joined'],
                 'constraints': [models.UniqueConstraint(condition=models.Q(('phone', ''), _negated=True), fields=('phone',), name='unique_non_empty_user_phone')],
             },
             managers=[

@@ -1,6 +1,20 @@
-# TeamFinder — учебная версия backend на Django
+# TeamFinder — backend на Django
 
 TeamFinder — платформа для поиска участников в pet-проекты. Реализован вариант 3: **необходимые навыки проектов и фильтрация проектов по навыкам**.
+
+## Автор
+
+[Полошков Ярослав Витальевич](https://t.me/wexul)
+
+## Технологический стек
+
+- Python 3.11+
+- Django 5.2
+- PostgreSQL
+- Docker Compose
+- Pillow
+- python-decouple
+- HTML-шаблоны, CSS и JavaScript из стартового набора TeamFinder
 
 ## Возможности
 
@@ -18,13 +32,22 @@ TeamFinder — платформа для поиска участников в pe
 - тестовый режим на SQLite;
 - базовые автоматические тесты.
 
+## Клонирование проекта
+
+```bash
+git clone https://github.com/wexul/team-finder-ad.git
+cd team-finder-ad
+```
+
 ## Быстрый запуск на Windows / macOS / Linux
+
+Создайте виртуальное окружение:
 
 ```bash
 python -m venv venv
 ```
 
-Активация:
+Активируйте его:
 
 ```bash
 # Windows PowerShell
@@ -37,27 +60,31 @@ venv\Scripts\activate.bat
 source venv/bin/activate
 ```
 
-Установка зависимостей:
+Установите зависимости:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Создайте `.env`:
+Создайте файл переменных окружения:
 
 ```bash
+# Windows
+copy .env_example .env
+
+# macOS / Linux
 cp .env_example .env
 ```
 
 ## Запуск с PostgreSQL
 
-Запустите базу:
+Запустите базу данных:
 
 ```bash
 docker compose up -d
 ```
 
-В `.env` оставьте:
+В `.env` оставьте настройки PostgreSQL:
 
 ```env
 DB_ENGINE=postgresql
@@ -92,20 +119,28 @@ python manage.py seed_demo
 python manage.py runserver
 ```
 
-Откройте:
+Откройте сайт:
 
 ```text
 http://127.0.0.1:8000/
 ```
 
-Демо-аккаунт после `seed_demo`:
+Админка доступна по адресу:
+
+```text
+http://127.0.0.1:8000/admin/
+```
+
+Демо-аккаунт после команды `seed_demo`:
 
 ```text
 email: maria@example.com
 password: password
 ```
 
-## Быстрый запуск без Docker, только для тестов
+## Быстрый запуск без Docker
+
+Этот режим нужен только для локальной проверки, если PostgreSQL или Docker пока не настроены.
 
 В `.env` поставьте:
 
@@ -113,11 +148,11 @@ password: password
 DB_ENGINE=sqlite
 ```
 
-Затем:
+Затем выполните:
 
 ```bash
 python manage.py migrate
-python manage.py test
+python manage.py seed_demo
 python manage.py runserver
 ```
 
@@ -131,21 +166,22 @@ python manage.py test
 ## Основные URL
 
 ```text
-/                         -> редирект на /projects/list/
-/projects/list/           -> список проектов
-/projects/<id>/           -> страница проекта
-/projects/create-project/ -> создание проекта
-/projects/<id>/edit/      -> редактирование проекта
-/projects/<id>/complete/  -> завершение проекта, POST
-/projects/<id>/toggle-participate/ -> участие/отказ, POST
-/projects/skills/         -> автодополнение навыков
-/projects/<id>/skills/add/ -> добавление навыка, POST
+/                                      -> редирект на /projects/list/
+/admin/                                -> админка
+/projects/list/                        -> список проектов
+/projects/<id>/                        -> страница проекта
+/projects/create-project/              -> создание проекта
+/projects/<id>/edit/                   -> редактирование проекта
+/projects/<id>/complete/               -> завершение проекта, POST
+/projects/<id>/toggle-participate/      -> участие/отказ, POST
+/projects/skills/                      -> автодополнение навыков
+/projects/<id>/skills/add/             -> добавление навыка, POST
 /projects/<id>/skills/<skill_id>/remove/ -> удаление навыка, POST
-/users/register/          -> регистрация
-/users/login/             -> вход
-/users/logout/            -> выход
-/users/list/              -> список пользователей
-/users/<id>/              -> профиль пользователя
-/users/edit-profile/      -> редактирование профиля
-/users/change-password/   -> смена пароля
+/users/register/                       -> регистрация
+/users/login/                          -> вход
+/users/logout/                         -> выход
+/users/list/                           -> список пользователей
+/users/<id>/                           -> профиль пользователя
+/users/edit-profile/                   -> редактирование профиля
+/users/change-password/                -> смена пароля
 ```

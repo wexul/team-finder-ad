@@ -32,10 +32,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "team_finder.urls"
 
-TASK_VERSION = config("TASK_VERSION", default="3")
-TEMPLATES_DIR = BASE_DIR / f"templates_var{TASK_VERSION}"
-if not TEMPLATES_DIR.exists():
-    TEMPLATES_DIR = BASE_DIR / "templates"
+TEMPLATES_DIR = BASE_DIR / "templates_var3"
 
 TEMPLATES = [
     {

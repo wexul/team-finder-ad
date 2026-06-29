@@ -1,23 +1,29 @@
 from io import BytesIO
+from random import choice
 from uuid import uuid4
 
 from django.core.files.base import ContentFile
 from PIL import Image, ImageDraw, ImageFont
 
+from team_finder.constants import AVATAR_COLORS, AVATAR_FONT_SIZE
+from team_finder.constants import AVATAR_SIZE, AVATAR_VERTICAL_SHIFT
+
+
+TEXT_COLOR = "white"
+
 
 def make_initial_avatar(name: str) -> tuple[str, ContentFile]:
-    """Create a small PNG avatar with the user's first initial."""
+    """Создать PNG-аватар с первой буквой имени пользователя."""
     initial = (name or "U").strip()[:1].upper() or "U"
-    colors = ["#6B7280", "#4B5563", "#2563EB", "#047857", "#7C3AED", "#B45309"]
-    background = colors[ord(initial) % len(colors)]
+    background = choice(AVATAR_COLORS)
 
-    image = Image.new("RGB", (256, 256), background)
+    image = Image.new("RGB", (AVATAR_SIZE, AVATAR_SIZE), background)
     draw = ImageDraw.Draw(image)
-    font = ImageFont.load_default(size=120)
+    font = ImageFont.load_default(size=AVATAR_FONT_SIZE)
     bbox = draw.textbbox((0, 0), initial, font=font)
-    x = (256 - (bbox[2] - bbox[0])) / 2
-    y = (256 - (bbox[3] - bbox[1])) / 2 - 8
-    draw.text((x, y), initial, fill="white", font=font)
+    x = (AVATAR_SIZE - (bbox[2] - bbox[0])) / 2
+    y = (AVATAR_SIZE - (bbox[3] - bbox[1])) / 2 - AVATAR_VERTICAL_SHIFT
+    draw.text((x, y), initial, fill=TEXT_COLOR, font=font)
 
     buffer = BytesIO()
     image.save(buffer, format="PNG")

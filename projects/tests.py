@@ -1,7 +1,9 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from projects.models import PROJECT_STATUS_CLOSED, Project, Skill
+from team_finder.constants import PROJECT_STATUS_CLOSED
+
+from projects.models import Project, Skill
 from users.models import User
 
 
@@ -13,7 +15,11 @@ class ProjectFlowTests(TestCase):
         self.member = User.objects.create_user(
             email="member@example.com", password="pass12345", name="Мила", surname="Участник"
         )
-        self.project = Project.objects.create(owner=self.owner, name="Django Hub", description="Test project")
+        self.project = Project.objects.create(
+            owner=self.owner,
+            name="Django Hub",
+            description="Test project",
+        )
         self.project.participants.add(self.owner)
 
     def test_project_list_available_for_guest(self):
@@ -25,7 +31,12 @@ class ProjectFlowTests(TestCase):
         self.client.force_login(self.owner)
         response = self.client.post(
             reverse("projects:create"),
-            {"name": "New API", "description": "API", "github_url": "https://github.com/example/api", "status": "open"},
+            {
+                "name": "New API",
+                "description": "API",
+                "github_url": "https://github.com/example/api",
+                "status": "open",
+            },
         )
         created = Project.objects.get(name="New API")
         self.assertRedirects(response, reverse("projects:detail", args=[created.pk]))
@@ -53,11 +64,17 @@ class ProjectFlowTests(TestCase):
 
     def test_owner_can_add_skill_by_name(self):
         self.client.force_login(self.owner)
-        response = self.client.post(reverse("projects:add_skill", args=[self.project.pk]), {"name": "Docker"})
+        response = self.client.post(
+            reverse("projects:add_skill", args=[self.project.pk]),
+            {"name": "Docker"},
+        )
         self.assertEqual(response.status_code, 200)
         self.assertTrue(self.project.skills.filter(name="Docker").exists())
 
     def test_foreign_user_cannot_add_skill(self):
         self.client.force_login(self.member)
-        response = self.client.post(reverse("projects:add_skill", args=[self.project.pk]), {"name": "Docker"})
+        response = self.client.post(
+            reverse("projects:add_skill", args=[self.project.pk]),
+            {"name": "Docker"},
+        )
         self.assertEqual(response.status_code, 403)
