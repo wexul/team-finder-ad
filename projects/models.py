@@ -16,7 +16,6 @@ class Skill(models.Model):
     name = models.CharField(
         max_length=SKILL_NAME_MAX_LENGTH,
         unique=True,
-        db_index=True,
     )
 
     class Meta:

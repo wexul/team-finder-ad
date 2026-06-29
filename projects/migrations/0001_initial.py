@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
             name='Skill',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(db_index=True, max_length=124, unique=True)),
+                ('name', models.CharField(max_length=124, unique=True)),
             ],
             options={
                 'verbose_name': 'Навык',

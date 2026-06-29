@@ -22,12 +22,12 @@ from .forms import ProjectForm
 from .models import Project, Skill
 
 
-FORBIDDEN_MESSAGE = "forbidden"
-PROJECT_CLOSED_MESSAGE = "project_closed"
-OWNER_PARTICIPANT_MESSAGE = "owner_already_participant"
-EMPTY_NAME_MESSAGE = "empty_name"
-SKILL_REQUIRED_MESSAGE = "skill_id_or_name_required"
-SKILL_NOT_IN_PROJECT_MESSAGE = "skill_not_in_project"
+FORBIDDEN_MESSAGE = "Действие доступно только автору проекта"
+PROJECT_CLOSED_MESSAGE = "Проект закрыт"
+OWNER_PARTICIPANT_MESSAGE = "Автор уже является участником проекта"
+EMPTY_NAME_MESSAGE = "Название навыка не может быть пустым"
+SKILL_REQUIRED_MESSAGE = "Передайте skill_id или название навыка"
+SKILL_NOT_IN_PROJECT_MESSAGE = "Навык не добавлен к проекту"
 
 
 def project_list(request):
